@@ -1,0 +1,568 @@
+<template>
+      <v-app id="inspire">
+       <!-----left_navigation_drawer--->
+        <v-navigation-drawer
+          v-model="drawer_left"
+          :clipped="$vuetify.breakpoint.lgAndUp"
+          fixed
+          app
+        >
+          <v-list dense>
+            <template v-for="item in items">
+              <v-layout
+                v-if="item.heading"
+                :key="item.heading"
+                row
+                align-center
+              >
+                <v-flex xs6>
+                  <v-subheader v-if="item.heading">
+                    {{ item.heading }}
+                  </v-subheader>
+                </v-flex>
+                <v-flex xs6 class="text-xs-center">
+                  <a href="#!" class="body-2 black--text">EDIT</a>
+                </v-flex>
+              </v-layout>
+              <v-list-group
+                v-else-if="item.children"
+                :key="item.text"
+                v-model="item.model"
+                :prepend-icon="item.model ? item.icon : item['icon-alt']"
+                append-icon=""
+              >
+                <template v-slot:activator>
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        {{ item.text }}
+                      </v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </template>
+                <v-list-tile
+                  v-for="(child, i) in item.children"
+                  :key="i"
+                  @click="testClick()"
+                >
+                  <v-list-tile-action v-if="child.icon">
+                    <v-icon>{{ child.icon }}</v-icon>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>
+                      {{ child.text }}
+                    </v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list-group>
+              <v-list-tile v-else :key="item.text" @click="testClick()">
+                <v-list-tile-action>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    {{ item.text }}
+                  </v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
+          </v-list>
+        </v-navigation-drawer>
+        
+        <!---Right_navigation_drawer----> 
+        <RightNavigation/>
+    
+
+        <v-toolbar
+          :clipped-left="$vuetify.breakpoint.lgAndUp"
+          color="blue darken-3"
+          dark
+          app
+          fixed
+        >
+          <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+            <v-toolbar-side-icon @click.stop="drawer_left = !drawer_left"></v-toolbar-side-icon>
+            <span class="hidden-sm-and-down">Puku Store</span>
+          </v-toolbar-title>
+          <v-text-field
+            flat
+            solo-inverted
+            hide-details
+            prepend-inner-icon="search"
+            label="Search"
+            class="hidden-sm-and-down"
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-btn icon>
+            <v-icon>apps</v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon>notifications</v-icon>
+          </v-btn>
+          <v-btn icon large>
+            <v-avatar size="32px" tile>
+              <img
+                src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
+                alt="Vuetify"
+              >
+            </v-avatar>
+          </v-btn>
+        </v-toolbar>
+        
+        <!-------Products------------>       
+
+        <v-content>          
+          <v-container  fill-height grid-list-lg>
+              <Products/>
+          </v-container>
+        </v-content>
+        
+        <!---------Feature----------------------->
+        <v-content>
+          <v-container>
+            <v-layout row wrap class="flex_box feature">
+                <v-flex xs12 sm4 class="flex_item ">
+                  <v-card class="border_transition ">
+                    <div class="background_transition">
+                    <div class="text-xs-center">
+                      <v-icon x-large class="blue--text  darken-3">local_shipping</v-icon>
+                    </div>
+                    <v-card-title primary-title>
+                      <div class="headline text-xs-center">FREE DELIVERY FROM $200</div>
+                    </v-card-title>
+                    <v-card-text>
+                      <p > Manage and invoice projects with the powerful project management feature. Track expenses and time spent on tasks and bill your customers.</p> 
+                    </v-card-text>
+                    </div>
+                  </v-card>
+                </v-flex>
+
+                <v-flex xs12 sm4 class="flex_item">
+                  <v-card class="border_transition">
+                    <div class="background_transition">
+                    <div class="text-xs-center">
+                      <v-icon x-large class="blue--text  darken-3">money_off</v-icon>
+                    </div>
+                    <v-card-title primary-title>
+                      <div class="headline text-xs-center">MONEY BACK GURANTEE</div>
+                    </v-card-title>
+                    <v-card-text>
+                      Build professional and great looking invoices. Attach files and send directly to your clients including the invoice PDF. 
+                    </v-card-text>
+                    </div>
+                  </v-card>
+                </v-flex>
+
+                <v-flex xs12 sm4 class="flex_item">
+                  <v-card class="border_transition">
+                    <div class="background_transition">
+                    <div class="text-xs-center">
+                      <v-icon x-large class="blue--text  darken-3">check_circle</v-icon>
+                    </div>
+                    <v-card-title primary-title>
+                      <div class="headline text-xs-center">AUTHENTICITY 100% GURANTED</div>
+                    </v-card-title>
+                    <v-card-text>
+                      Create estimate within a minute. Sent to your customers and wait to accept. Ability to auto convert the estimate to invoice after customer accept. 
+                    </v-card-text>
+                    </div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </v-container>
+        </v-content>         
+        
+        <!-------Modal---------->
+        <Modal />
+        
+       
+      </v-app>
+    </template>
+
+<script>
+import RightNavigation from '~/components/RightNavigation.vue'
+import Products from '~/components/Products.vue'
+import Modal from '~/components/Modal.vue'
+export default {
+  components:{
+     RightNavigation,Products,Modal
+  },
+  data() {
+    return {     
+      drawer_left: null,     
+      itemz:[],
+      items: [
+        { icon: 'contacts', text: 'Contacts' },
+        { icon: 'history', text: 'Frequently contacted' },
+        { icon: 'content_copy', text: 'Duplicates' },
+        {
+          icon: 'keyboard_arrow_up',
+          'icon-alt': 'keyboard_arrow_down',
+          text: 'Labels',
+          model: true,
+          children: [
+            { icon: 'add', text: 'Create label' }
+          ]
+        },
+        {
+          icon: 'keyboard_arrow_up',
+          'icon-alt': 'keyboard_arrow_down',
+          text: 'More',
+          model: false,
+          children: [
+            { text: 'Import' },
+            { text: 'Export' },
+            { text: 'Print' },
+            { text: 'Undo changes' },
+            { text: 'Other contacts' }
+          ]
+        },
+        { icon: 'settings', text: 'Settings' },
+        { icon: 'chat_bubble', text: 'Send feedback' },
+        { icon: 'help', text: 'Help' },
+        { icon: 'phonelink', text: 'App downloads' },
+        { icon: 'keyboard', text: 'Go to the old version' }
+      ]
+    }
+  },
+  methods:{
+    testClick(){
+      console.log("Hello World");        
+    }
+  },  
+  props: {
+    source: String
+  }
+}
+</script>
+
+
+<style>
+     
+.right_navigation{
+  display:none;
+}
+     
+.right_navigation  .v-list__tile__action {
+  min-width: 35px;
+}
+      
+.navigation_card_quantity .v-list__tile__action {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 35px;
+}
+
+.right_navigation1  .v-list__tile__action {
+  min-width: 35px;
+}
+  
+.item_list{
+  height:auto;
+  border-bottom: 1px solid #E0E0E0;
+  padding:0;
+}     
+      
+.v-card__text{
+  padding:0;
+}
+
+.item_list .quantity{
+  height: 70px;
+  width:10%; 
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid #E0E0E0;
+}
+
+.item_list .quantity p{
+  margin:0;
+}
+      
+.item_list .image{
+  height: 70px;
+  width:15%; 
+  display:flex;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+}
+      
+.item_list .item_name{
+  height: 70px;
+  width:35%; 
+  padding:8px 2px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+}
+
+.item_list .item_name p{
+  font-size: 12px;
+  margin-top:-15px;
+}
+
+.item_list .item_name p:nth-of-type(1){
+  margin-top:0px;
+}
+      
+.item_list .item_price{
+  height: 70px;
+  width:20%; 
+  padding:8px 0px;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+}
+
+.item_list .item_price p{
+margin-top:-15px;
+}
+
+.item_list .item_price p:nth-of-type(1){
+  margin-top:0px;
+}
+
+.item_list .close{
+  height: 70px;
+  width:3%; 
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+}
+      
+.item_list .close .v-icon{
+  margin-left: -5px;
+}
+      
+.overlay{
+  position:absolute;
+  top:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  text-align:center;
+  background: rgb(0,0,0,.4)!important;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+      
+.overlay h1{
+  margin-top: 40%;
+  color:#FFF;
+  padding-left:20%;
+  padding-right:20%;
+}     
+      
+.overlay_container:hover .overlay{
+  opacity:1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.39);
+}
+
+.shop_card_section{
+  color:white!important;
+  height:80px!important;
+  min-width:65px!important;
+  position:fixed!important;
+  right:0!important;
+  top:50%!important;
+  z-index:1!important;
+  background: RGB(49,120,200,.8)!important;
+  padding:0!important;  
+}
+
+.shop_card{
+  position:relative;
+  width:100%;
+  float:left;padding:0!important;
+  margin:0!important; 
+}
+
+.shop_card p{
+  position:absolute;
+  margin-bottom:0;
+  width:100%;
+  background: #FFF;
+  color:black;
+}
+
+.details{
+  position:absolute;
+  bottom:0;
+  left:0;
+  text-align:center;
+  width:100%;
+  margin:0;
+  padding: 0;
+}
+
+.details .v-btn{
+  width:100%;
+}
+      
+.flex_box .v-card {
+  padding: 30px!important;
+  line-height: 22px;
+}
+
+.flex_box{
+  display:flex;
+}
+
+.flex_item{
+  flex:1;
+  display:flex;
+  flex-wrap:wrap;
+  flex-grow: 1;          
+}
+
+.flex_box .v-card{
+  padding:20px; 
+  width:100%;
+}
+      
+.flex_item .headline{
+  width:100%;
+  margin-bottom:15px;
+}
+      
+.flex_box .v-card__text {
+  padding: 0px;
+}
+      
+.flex_box .v-card__title {
+  padding:10px 0 0;
+}
+      
+.feature .headline{
+  font-size:18px!important;
+  font-weight: bold;
+}  
+   
+.border_transition{
+	height:100%;
+	width:100%;
+	position:relative;
+	background:transparent;
+	outline:none;
+	border:none;
+}
+
+.border_transition:before{
+	position:absolute;
+	content:'';
+	height:0;
+	width:0;
+	border:1px solid transparent;
+	left:0;
+	top:0;
+	box-sizing:border-box;
+}
+    
+.border_transition:hover:before{
+	height:100%;
+	width:100%;
+	border:1px solid #bbdefb;
+	border-left:none;
+	border-bottom:none;
+	transition:height 0.3s linear  0.3s,
+   width 0.3s linear ;        
+}
+
+.border_transition:after{
+	position:absolute;
+	content:'';
+	height:0;
+	width:0;
+	border:1px solid transparent;
+	top:0;
+	left:0;
+	box-sizing:border-box;
+}	
+	
+.border_transition:hover:after{
+	height:100%;
+	width:100%;
+	border:1px solid #90caf9  ;
+	border-right:none;
+	border-top:none;
+	transition:height 0.3s linear,
+	width 0.3s linear 0.3s;
+}
+    
+.background_transition:hover{
+  color:#9e9e9e!important;
+}
+.background_transition{
+  animation: change .1s 0.1s;    
+}
+
+      
+@keyframes change {
+  0% { color:black;}
+  1% { color:black; }
+}
+      
+.products_detail .v-card__actions {
+  padding: 0 20px;
+  margin:20px 0;
+}
+
+.products_detail .v-text-field>.v-input__control>.v-input__slot {
+  width: 40%!important;
+  margin: 7px 0 0!important;
+}     
+      
+.products_detail p{
+  background:#efeded;
+  padding:20px;
+}
+
+.products_detail .v-text-field > .v-input__control > .v-input__slot {
+  width: 70% !important;
+  margin: 5px 0 0 8px!important;
+}
+    
+.products_detail .v-text-field.v-text-field--solo .v-input__control {
+  max-height: 20px!important;
+  padding: 0;
+}
+
+.v-text-field.v-text-field--solo .v-input__control {
+  min-height: 38px!important;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+@media (max-width:599px){
+.v-text-field.v-text-field--solo .v-input__control {
+  min-height: 38px!important;
+  padding: 0;
+  margin-bottom: 5px;
+}
+}
+
+@media (max-width:420px){
+.products_detail h4,.products_detail .my-3{
+  font-size: 20px!important;
+  margin-top:0!important;
+  padding:0 10px!important;
+} 
+.flex_box .v-card{
+  padding:0!important;  
+}
+.products_detail .v-card__text  p{
+  font-size:14px!important;
+  padding:10px!important;
+}         
+}
+
+</style>
