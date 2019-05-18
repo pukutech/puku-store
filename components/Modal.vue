@@ -1,6 +1,5 @@
 <template>
-    <v-app>
-        
+  <v-layout>      
         
        <v-btn
           fab
@@ -85,12 +84,12 @@
         </v-dialog>
 
         
-    </v-app>
+      </v-layout>     
 </template>
 
 <script>
 export default {
-    data() {
+  data() {
     return {
       dialog: false,
       dialog1: false,
