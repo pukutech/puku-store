@@ -7,16 +7,12 @@
 
     <v-content>          
       <v-container fill-height grid-list-lg>
-          <Products/>
+          <Products @newItemAdded="addCartItem" :products='products' />
       </v-container>
     </v-content>
 
     <!---Right_navigation_drawer----> 
-    <RightNavigation/>
-
-    
-   
-   
+    <RightNavigation @productRemoved="removeProduct" :products='cart' />      
     
     <!-------Modal---------->
     <Modal />
@@ -73,17 +69,33 @@ return {
     { icon: 'help', text: 'Help' },
     { icon: 'phonelink', text: 'App downloads' },
     { icon: 'keyboard', text: 'Go to the old version' }
-  ]
+  ],
+  products:[
+    {name:"Buldozer Blue", quantity:1, price:"1.30", image:"https://shop.budspencerofficial.com/340-large_default/bud-spencer-bulldozer-63-t-shirt.jpg"},
+    {name:"Visit Arakis", quantity:1, price:"2.30", image:"https://images-na.ssl-images-amazon.com/images/I/81tHrL6pNcL._UL1500_.jpg"},
+    {name:"Khobsgol Lake", quantity:1, price:"3.30", image:"https://cdn.shopify.com/s/files/1/0660/7355/products/Royal_Enfield_Icing_On_A_Lake_T-Shirt_Lake_Blue_1_1400x.jpg?v=1537426243"},
+    {name:"Buldozer White", quantity:1, price:"11.30", image:"https://shop.budspencerofficial.com/356-large_default/bud-spencer-bulldozer-63-grey-t-shirt.jpg"},
+    {name:"Easily", quantity:1, price:"7.30", image:"https://cdn.shopify.com/s/files/1/1782/0735/products/DynamicImageHandler_0cf109d1-7cbd-4da2-88a2-88909a8dd993_1024x1024.jpg?v=1507277076"},
+    {name:"Yellow Bull", quantity:1, price:"8.30", image:"https://image.spreadshirtmedia.net/image-server/v1/products/133248349/views/1,width=650,height=650,appearanceId=7,version=1478003241.jpg"},
+    {name:"Heroes", quantity:1, price:"4.30", image:"https://shop.budspencerofficial.com/466-large_default/bud-spencer-old-school-heroes-white-girls-t-shirt.jpg"},
+    {name:"Hello", quantity:1, price:"3.30", image:"https://m.media-amazon.com/images/I/B1qmQK-r4OS._CLa%7C2140,2000%7C718jTY4XCZL.png%7C0,0,2140,2000+0.0,0.0,2140.0,2000.0._UX522_.png"},
+    {name:"Mucke", quantity:1, price:"21.30", image:"http://www.style3.de/ebay/860027_03.jpg"},
+    {name:"Bomber", quantity:1, price:"9.30", image:"https://www.dhresource.com/0x0s/f2-albu-g8-M01-75-15-rBVaVFyUyCCABUvhAAFaJhUX7m8137.jpg/bomber-bud-spencer-jerry-cal-boxe-trash-pugilato.jpg"},
+    {name:"Ramon", quantity:1, price:"4.30", image:"https://image.spreadshirtmedia.net/image-server/v1/products/107742338/views/2,width=650,height=650,appearanceId=1,version=1478003241.jpg"},
+    {name:"Smile", quantity:1, price:"2.30", image:"https://www.terencebud.de/media/images/org/buddy-t-shirt-bud-spencer-orange.jpg"},
+  ],
+  cart:[]
 }
 },
 methods:{
-testClick(){
-  console.log("Hello World");        
+  addCartItem(product){
+    this.cart.push(product);
+  },
+  removeProduct(index){
+    this.cart.splice(index, 1)
+  }
 }
-},  
-props: {
-source: String
-}
+
 }
 </script>
 

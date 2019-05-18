@@ -3,8 +3,8 @@
                 <v-btn small @click.stop="drawer = !drawer" class="shop_card_section">
                     <div class="shop_card">
                         <v-icon>add_shopping_cart</v-icon>
-                        <h5>1 items</h5>
-                        <p>$00</p>
+                        <h5>{{totalQuantity}} items</h5>
+                        <p>${{totalPrice}}</p>
                     </div>
                 </v-btn>
               
@@ -64,7 +64,7 @@
                         <v-list dense   class="right_navigation1" style="margin:0!important;padding:0!important;">
                         <v-list-tile  class=" px-1 blue darken-3  white--text">
                             <v-list-tile-content>
-                            <v-list-tile-title>Shop $300 more and save $20<span class="right">$50</span></v-list-tile-title>
+                            <v-list-tile-title>Shop $300 more and save $20<span class="right">${{totalPrice}}</span></v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         
@@ -78,30 +78,30 @@
                             </v-list-tile-title>
                         </v-list-tile>
                            
-                        <!---------------------Your_order------------------------------------>
-                        <v-flex class="xs12 d-flex item_list">                
+                        <!---------------------Cart------------------------------------>
+
+                        <v-flex class="xs12 d-flex item_list" v-for="(product, index) in products" :key="index">                
                             <v-card-text flat class="quantity grey--text text--darken-2">
                                 <v-icon small style="cursor: pointer;">expand_less</v-icon>
-                                <p>10</p>
+                                <p>1</p>
                                 <v-icon small style="cursor: pointer;">expand_more</v-icon>
                             </v-card-text>
                             
                             <v-card-text flat class="image">
-                                <v-img :src="require('@/assets/images/tshirt.jpg')"></v-img>
+                                <v-img :src="product.image" aspect-ratio="1"></v-img>
                             </v-card-text>
                             
                             <v-card-text flat class="item_name grey--text text--darken-2">
-                                <p>Blue pure cotton t-shirt</p>
-                                <p>$19</p>
+                                <p>{{product.name}}</p>
+                                <p>${{product.price}}</p>
                             </v-card-text>
                             
-                            <v-card-text flat  class="item_price red--text text--darken-2">
-                                <p>$944466</p>
-                                <p><del style="color:black;">$19</del></p>
+                            <v-card-text flat  class="item_price black--text text--darken-2">
+                                <p>${{product.price}}</p>                                
                             </v-card-text>
                             
                             <v-card-text flat class="close">
-                                <v-icon small style="cursor: pointer;">close</v-icon>
+                                <v-icon @click="removeProduct(index)" small style="cursor: pointer;">close</v-icon>
                             </v-card-text>                
                         </v-flex>
                             
@@ -172,13 +172,33 @@ export default {
       dialog: false,
       dialog1: false,      
       drawer: null,
-      drawer:false,
-   
+      drawer:false,  
+    }   
+  },
+  props: ['products'],
+  computed:{
+    totalPrice(){
+      var total=0;
+      this.products.forEach(product => {
+        total += parseFloat(product.price)
+      });
+      return total.toFixed(2);
+    },
+    totalQuantity(){
+      var total=0;
+      this.products.forEach(product => {
+        total += parseFloat(product.quantity)
+      });
+      return total;
     }
   },
-  props: {
-    source: String
+  methods:{
+    removeProduct(index){      
+      this.$emit('productRemoved', index)
+    }
   }
+  
+  
 }
 </script>
 
