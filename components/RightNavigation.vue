@@ -4,7 +4,7 @@
                     <div class="shop_card">
                         <v-icon>add_shopping_cart</v-icon>
                         <h5>1 items</h5>
-                        <ps>$00</p>
+                        <p>$00</p>
                     </div>
                 </v-btn>
               
