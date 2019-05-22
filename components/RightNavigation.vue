@@ -3,7 +3,7 @@
                 <v-btn small @click.stop="drawer = !drawer" class="shop_card_section">
                     <div class="shop_card">
                         <v-icon>add_shopping_cart</v-icon>
-                        <h5>{{totalQuantity}} items</h5>
+                        <h5>{{cart.length}} {{cart.length > 1 ? 'Items':'Item'}}</h5>
                         <p>${{totalPrice}}</p>
                     </div>
                 </v-btn>
@@ -24,7 +24,7 @@
                                 </v-list-tile-action>
                                 
                                 <v-list-tile-title>
-                                    0 ITEMS
+                                   Copy here
                                 </v-list-tile-title>
                                 <v-btn  class="grey--text text--darken-2" small @click.stop="drawer = !drawer"><span>close</span></v-btn>
                             </v-list-tile>
@@ -80,31 +80,36 @@
                            
                         <!---------------------Cart------------------------------------>
 
-                        <v-flex class="xs12 d-flex item_list" v-for="(product, index) in products" :key="index">                
+                        <v-flex class="xs12 d-flex item_list" v-for="(item, index) in cart" :key="index">                
                             <v-card-text flat class="quantity grey--text text--darken-2">
                                 <v-icon small style="cursor: pointer;">expand_less</v-icon>
-                                <p>1</p>
+                                <p>{{item.quantity}}</p>
                                 <v-icon small style="cursor: pointer;">expand_more</v-icon>
                             </v-card-text>
                             
                             <v-card-text flat class="image">
-                                <v-img :src="product.image" aspect-ratio="1"></v-img>
+                                <v-img :src="item.product.image" aspect-ratio="1"></v-img>
                             </v-card-text>
                             
                             <v-card-text flat class="item_name grey--text text--darken-2">
-                                <p>{{product.name}}</p>
-                                <p>${{product.price}}</p>
+                                <p>{{item.product.name}}</p>
+                                <p>${{item.product.price}}</p>
                             </v-card-text>
                             
                             <v-card-text flat  class="item_price black--text text--darken-2">
-                                <p>${{product.price}}</p>                                
+                                <p>${{(item.product.price*item.quantity).toFixed(2)}}</p>                                
                             </v-card-text>
                             
                             <v-card-text flat class="close">
                                 <v-icon @click="removeProduct(index)" small style="cursor: pointer;">close</v-icon>
                             </v-card-text>                
                         </v-flex>
-                            
+
+                        <v-flex d-flex style="position:absolute;bottom:0;width:100%;">
+                          <v-flex class="xs7 text-xs-center blue darken-3 white--text" style="border:1px solid red;padding:10px 0px;">Place Order</v-flex>
+                          <v-flex class="xs5 text-xs-center blue darken-3-1 white--text" style="border:1px solid red;padding:10px 0px;">${{totalPrice}}</v-flex>
+                        </v-flex>
+                                    
                         </v-list>
                        </v-flex> 
                   </v-navigation-drawer>
@@ -167,7 +172,7 @@
 
 <script>
 export default {
-    data() {
+  data() {
     return {
       dialog: false,
       dialog1: false,      
@@ -175,27 +180,21 @@ export default {
       drawer:false,  
     }   
   },
-  props: ['products'],
+  props: ['cart'],
   computed:{
     totalPrice(){
       var total=0;
-      this.products.forEach(product => {
-        total += parseFloat(product.price)
+      this.cart.forEach(item => {
+        total += parseFloat(item.product.price * item.quantity)
       });
       return total.toFixed(2);
-    },
-    totalQuantity(){
-      var total=0;
-      this.products.forEach(product => {
-        total += parseFloat(product.quantity)
-      });
-      return total;
-    }
+    },    
   },
   methods:{
     removeProduct(index){      
       this.$emit('productRemoved', index)
-    }
+    },    
+
   }
   
   

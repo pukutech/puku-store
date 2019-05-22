@@ -4,7 +4,7 @@
        <v-btn
           fab
           bottom
-          right
+          left
           color="pink"
           dark
           fixed

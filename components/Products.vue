@@ -102,9 +102,9 @@ export default {
   },
   props:['products'],
   methods:{
-     addToCart(product){
-        this.$emit('newItemAdded', product);
-     }
+    addToCart(product){
+      this.$emit('newItemAdded', product);
+    }     
   },
 }
 </script>
