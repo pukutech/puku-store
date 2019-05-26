@@ -109,28 +109,16 @@ methods:{
         quantity: productQuantity
       }
       this.cart.push(items);
-      console.log(items);      
     }else {
-      // If item is already into the cart and add the same item again 
-      if (!quantity) {
-        var items = {
-          product: product,
-          quantity: 2
-        }
-        this.cart.push(items);
-        console.log(items);           
-        //this.$store.commit('catalog/increaseQuantity', index)
-        //this.updateLocalStorage()
-      } else {
-        //this.$store.commit('catalog/updateQuantity', { index, productQuantity })
-        //this.updateLocalStorage()
-      }
+      // If item is already into the cart then just update the quantity
+        
     }
   },
-
   removeProduct(index){
     this.cart.splice(index, 1)
-  }
+  },
+ 
+
 },
 
 
